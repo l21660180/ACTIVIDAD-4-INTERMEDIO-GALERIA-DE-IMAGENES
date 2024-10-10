@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería de Imágenes con Modal</title>
+    <style>
+        /* Estilos generales del cuerpo: fondo de color y fuente elegante */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffd1dc; /* Fondo rosa pastel */
+            margin: 0;
+            padding: 0;
+            color: #f0f4f8;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Ocupa toda la altura de la pantalla */
+        }
+
+        /* Título de la galería centrado con estilo moderno */
+        h2 {
+            text-align: center;
+            color: #000000;
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        /* Contenedor de la galería: diseño de cuadrícula para alinear las imágenes */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Ajusta el número de columnas según el tamaño de la pantalla */
+            gap: 20px; /* Espacio entre las imágenes */
+            justify-items: center; /* Centra las imágenes en sus columnas */
+            max-width: 1200px; /* Limita el ancho máximo de la galería */
+        }
+
+        /* Estilos para las imágenes en la galería */
+        .gallery img {
+            width: 250px; /* Aumenta el tamaño de las imágenes */
+            border-radius: 15px; /* Bordes redondeados */
+            cursor: pointer; /* Cambia el cursor a una mano al pasar por encima */
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animación suave al pasar el ratón */
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* Sombra en las imágenes */
+        }
+
+        /* Escala ligeramente la imagen y añade sombra al pasar el ratón */
+        .gallery img:hover {
+            transform: scale(1.1);
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Estilos para el modal que cubre toda la pantalla con un fondo oscuro */
+        .modal {
+            display: none; /* Oculta el modal por defecto */
+            position: fixed;
+            z-index: 1; /* Se asegura de que el modal esté por encima de otros elementos */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8); /* Fondo oscuro semitransparente */
+            justify-content: center; /* Centra la imagen horizontalmente */
+            align-items: center; /* Centra la imagen verticalmente */
+        }
+
+        /* Imagen que se mostrará dentro del modal */
+        .modal-content {
+            max-width: 90%; /* La imagen ocupará como máximo el 90% del ancho de la pantalla */
+            max-height: 90%; /* La imagen ocupará como máximo el 90% de la altura de la pantalla */
+            border-radius: 10px; /* Bordes redondeados para la imagen en el modal */
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5); /* Sombra para la imagen modal */
+        }
+
+        /* Botón de cierre (X) del modal */
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 40px; /* Tamaño de la "X" */
+            color: white; /* Color blanco para la "X" */
+            cursor: pointer; /* Cambia el cursor a una mano al pasar por encima */
+            transition: color 0.3s ease; /* Transición suave al cambiar de color */
+        }
+
+        /* Cambia el color de la "X" cuando el usuario pasa el ratón por encima */
+        .close:hover {
+            color: #ff5555;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Título de la galería -->
+    <h2>Galería de Imágenes</h2>
+
+    <!-- Contenedor de la galería de imágenes -->
+    <div class="gallery">
+        <!-- Cada imagen de la galería con un ID único -->
+        <img id="ladyImage" src="Lady.jpg" alt="Imagen Lady">
+        <img id="loginImage" src="login.jpg" alt="Imagen Login">
+        <img id="compuImage" src="compu.jpg" alt="Imagen Compu">
+    </div>
+
+    <!-- Modal para mostrar las imágenes ampliadas -->
+    <div id="myModal" class="modal">
+        <!-- Botón de cierre del modal -->
+        <span class="close">&times;</span>
+        <!-- Imagen dentro del modal que se actualizará dinámicamente -->
+        <img class="modal-content" id="imgModal">
+    </div>
+
+    <script>
+        // Obtener el modal, la imagen dentro del modal y el botón de cierre
+        var modal = document.getElementById("myModal"); // Modal completo
+        var modalImg = document.getElementById("imgModal"); // Imagen dentro del modal
+        var span = document.getElementsByClassName("close")[0]; // Botón de cierre (X)
+
+        /**
+         * Función que abre el modal con la imagen seleccionada.
+         * @param {string} imageSrc - La fuente (src) de la imagen que se va a mostrar en el modal.
+         */
+        function openModal(imageSrc) {
+            modal.style.display = "flex"; // Muestra el modal con estilo flex
+            modalImg.src = imageSrc; // Establece la imagen seleccionada en el modal
+        }
+
+        // Añadir evento de clic a cada imagen para abrir el modal con la imagen seleccionada
+        document.getElementById("ladyImage").onclick = function() {
+            openModal(this.src); // Abre el modal con la imagen "Lady"
+        }
+
+        document.getElementById("loginImage").onclick = function() {
+            openModal(this.src); // Abre el modal con la imagen "Login"
+        }
+
+        document.getElementById("compuImage").onclick = function() {
+            openModal(this.src); // Abre el modal con la imagen "Compu"
+        }
+
+        // Cierra el modal cuando el usuario hace clic en la "X"
+        span.onclick = function() {
+            modal.style.display = "none"; // Oculta el modal
+        }
+
+        // Cierra el modal cuando el usuario hace clic fuera de la imagen (en el área oscura)
+        modal.onclick = function(e) {
+            if (e.target === modal) {
+                modal.style.display = "none"; // Oculta el modal
+            }
+        }
+
+        // Cierra el modal al presionar la tecla Escape
+        document.onkeydown = function(event) {
+            if (event.key === "Escape") {
+                modal.style.display = "none"; // Oculta el modal
+            }
+        }
+    </script>
+
+</body>
+</html>
